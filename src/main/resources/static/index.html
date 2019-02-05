@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="webjars/jquery/3.3.1-1/jquery.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Podaj kwote w PLN" id="currencyExchangeValInput">
+                <input type="date" class="form-control" id="currencyExchangeDateInput" value="2018-06-07">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="currencyExchangeButton">Przelicz na
+                        EURO
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+    $('#currencyExchangeButton').click(function () {
+        var enteredValue = $('#currencyExchangeValInput').val();
+        var enteredDate = $('#currencyExchangeDateInput').val();
+        $.ajax({
+            type: "GET",
+            url: "/exchange/" + enteredValue + "/" + enteredDate,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function (result) {
+                $('#currencyExchangeValInput').val(result.value);
+            },
+            error: function (result) {
+                console.log(result);
+                alert(result.responseJSON.errorMessage || result.responseJSON.message);
+            }
+        })
+    });
+
+</script>
